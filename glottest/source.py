@@ -2,9 +2,9 @@ import os
 
 import yaml
 
-from samplerunner import testinfo
-from samplerunner.containerfactory import ContainerFactory
-from samplerunner.project import ProjectType
+from glottest import testinfo
+from glottest.containerfactory import ContainerFactory
+from glottest.project import ProjectType
 
 
 class Source:

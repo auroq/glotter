@@ -1,19 +1,19 @@
 import sys
 import argparse
 
-from samplerunner.run import run
-from samplerunner.test import test
-from samplerunner.download import download
+from glottest.run import run
+from glottest.test import test
+from glottest.download import download
 
 
 def main():
     parser = argparse.ArgumentParser(
-        prog='samplerunner',
-        usage='''usage: samplerunner [-h] COMMAND
+        prog='glottest',
+        usage='''usage: glottest [-h] COMMAND
 
 Commands:
-  run         Run sources or group of sources. Use `samplerunner run --help` for more information.
-  test        Run tests for sources or a group of sources. Use `samplerunner test --help` for more information.
+  run         Run sources or group of sources. Use `glottest run --help` for more information.
+  test        Run tests for sources or a group of sources. Use `glottest test --help` for more information.
   download    Download all the docker images required to run the tests
 '''
     )
@@ -34,7 +34,7 @@ Commands:
 
 def parse_download():
     parser = argparse.ArgumentParser(
-        prog='samplerunner',
+        prog='glottest',
         description='Run a source or a group of sources. This command can run a language, a project'
                     'or a single source. Only one option may be specified.',
     )
@@ -44,7 +44,7 @@ def parse_download():
 
 def parse_run():
     parser = argparse.ArgumentParser(
-        prog='samplerunner',
+        prog='glottest',
         description='Run a source or a group of sources. This command can run a language, a project'
                     'or a single source. Only one option may be specified.',
     )
@@ -54,7 +54,7 @@ def parse_run():
 
 def parse_test():
     parser = argparse.ArgumentParser(
-        prog='samplerunner',
+        prog='glottest',
         description='Test a source or a group of sources. This command can test a language, a project'
                     'or a single source. Only one option may be specified.',
     )
