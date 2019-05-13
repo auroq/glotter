@@ -1,9 +1,9 @@
 import os
 import sys
 
-from samplerunner.source import get_sources
-from samplerunner.project import get_project_type_by_name
-from samplerunner.containerfactory import ContainerFactory
+from glottest.source import get_sources
+from glottest.project import get_project_type_by_name
+from glottest.containerfactory import ContainerFactory
 
 
 def download(args):

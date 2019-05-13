@@ -1,8 +1,8 @@
 import os
 import sys
 
-from samplerunner.source import get_sources
-from samplerunner.project import requires_params, get_project_type_by_name
+from glottest.source import get_sources
+from glottest.project import requires_params, get_project_type_by_name
 
 
 def run(args):

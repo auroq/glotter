@@ -1,7 +1,7 @@
 import yaml
 from jinja2 import Environment, BaseLoader
 
-from samplerunner.project import ProjectType, NamingScheme, get_project_name
+from glottest.project import ProjectType, NamingScheme, get_project_name
 
 
 class ContainerInfo:
