@@ -16,14 +16,20 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class ContainerFactory:
-    _containers = {}
-    _volume_dis = {}
-    _client = docker.from_env()
-    _api_client = _client.api
+class ContainerFactory(metaclass=Singleton):
 
-    @classmethod
-    def get_container(cls, source):
+    def __init__(self, docker_client=None):
+        """
+        Initialize a ContainerFactory. This class is a singleton.
+
+        :param docker_client: optionally set the docker client. Defaults to setting from the environment
+        """
+        self._containers = {}
+        self._volume_dis = {}
+        self._client = docker_client or docker.from_env()
+        self._api_client = self._client.api
+
+    def get_container(self, source):
         """
         Returns a running container for a give source. This will return an existing container if one exists
         or create a new one if necessary
@@ -35,12 +41,12 @@ class ContainerFactory:
 
         tmp_dir = tempfile.mkdtemp()
         shutil.copy(source.full_path, tmp_dir)
-        cls._volume_dis[key] = tmp_dir
+        self._volume_dis[key] = tmp_dir
 
-        image = cls.get_image(source.test_info.container_info)
+        image = self.get_image(source.test_info.container_info)
         volume_info = {tmp_dir: {'bind': '/src', 'mode': 'rw'}}
-        if key not in cls._containers:
-            cls._containers[key] = cls._client.containers.run(
+        if key not in self._containers:
+            self._containers[key] = self._client.containers.run(
                 image=image,
                 name=f'{source.name}_{uuid().hex}',
                 command='sleep 1h',
@@ -48,10 +54,9 @@ class ContainerFactory:
                 volumes=volume_info,
                 detach=True,
             )
-        return cls._containers[key]
+        return self._containers[key]
 
-    @classmethod
-    def get_image(cls, container_info, quiet=False):
+    def get_image(self, container_info, quiet=False):
         """
         Pull a docker image
 
@@ -59,13 +64,13 @@ class ContainerFactory:
         :param quiet: whether to print output while downloading
         :return: a docker image
         """
-        images = cls._client.images.list(name=f'{container_info.image}:{str(container_info.tag)}')
+        images = self._client.images.list(name=f'{container_info.image}:{str(container_info.tag)}')
         if len(images) == 1:
             return images[0]
         if not quiet:
             print(f'Pulling {container_info.image}:{container_info.tag}... ', end='')
         last_update = datetime.now()
-        for _ in cls._api_client.pull(
+        for _ in self._api_client.pull(
                 repository=container_info.image,
                 tag=str(container_info.tag),
                 stream=True,
@@ -76,12 +81,11 @@ class ContainerFactory:
                 last_update = datetime.now()
         if not quiet:
             print('done')
-        images = cls._client.images.list(name=f'{container_info.image}:{str(container_info.tag)}')
+        images = self._client.images.list(name=f'{container_info.image}:{str(container_info.tag)}')
         if len(images) == 1:
             return images[0]
 
-    @classmethod
-    def cleanup(cls, source):
+    def cleanup(self, source):
         """
         Cleanup docker container and temporary folder. Also remove both from their
         respective dictionaries
@@ -90,8 +94,8 @@ class ContainerFactory:
         """
         key = source.full_path
 
-        cls._containers[key].remove(v=True, force=True)
-        shutil.rmtree(cls._volume_dis[key], ignore_errors=True)
+        self._containers[key].remove(v=True, force=True)
+        shutil.rmtree(self._volume_dis[key], ignore_errors=True)
 
-        del cls._volume_dis[key]
-        del cls._containers[key]
+        del self._volume_dis[key]
+        del self._containers[key]
