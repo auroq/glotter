@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='glottest',
+    name='glotter',
     version='1.0.0',
-    entry_points={'console_scripts': ['glottest = glottest.__main__:main']},
+    entry_points={'console_scripts': ['glotter = glotter.__main__:main']},
     packages=find_packages(exclude=('test',)),
     install_requires=[
         'docker>=3.7.0, <3.8',

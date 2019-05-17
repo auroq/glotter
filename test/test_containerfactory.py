@@ -1,7 +1,7 @@
 import pytest
 
-from glottest.testinfo import ContainerInfo
-from glottest import containerfactory
+from glotter.testinfo import ContainerInfo
+from glotter import containerfactory
 
 
 class Containers:
