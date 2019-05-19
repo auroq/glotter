@@ -110,5 +110,5 @@ def test_cleanup_removes_volume_dir(source, factory, monkeypatch):
     monkeypatch.setattr('tempfile.mkdtemp', lambda *args, **kwargs: 'TEMP_DIR')
     monkeypatch.setattr('shutil.copy', lambda *args, **kwargs: '')
     monkeypatch.setattr('shutil.rmtree', verify_rmtree)
-    container = factory.get_container(source)
+    factory.get_container(source)
     factory.cleanup(source)
