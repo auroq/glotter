@@ -60,6 +60,12 @@ class ContainerInfo:
             build=build
         )
 
+    def __eq__(self, other):
+        return self.image == other.image and \
+               self.cmd == other.cmd and \
+               self.tag == other.tag and \
+               self.build == other.build
+
 
 class FolderInfo:
     """Metadata about sources in a directory"""
@@ -100,6 +106,10 @@ class FolderInfo:
             project_type: f'{get_project_name(self.naming, project_type)}{extension}'
             for project_type in ProjectType
         }
+
+    def __eq__(self, other):
+        return self.extension == other.extension and \
+               self.naming == other.naming
 
     @classmethod
     def from_dict(cls, dictionary):
@@ -161,3 +171,7 @@ class TestInfo:
         template_string = template.render(source=source)
         info_yaml = yaml.safe_load(template_string)
         return cls.from_dict(info_yaml)
+
+    def __eq__(self, other):
+        return self.container_info == other.container_info and \
+               self.file_info == other.file_info
