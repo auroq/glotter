@@ -9,6 +9,67 @@ class NamingScheme(Enum):
     lower = auto()
 
 
+class AcronymScheme(Enum):
+    lower = auto()
+    upper = auto()
+    two_letter_limit = auto()
+
+
+class Project:
+    def __init__(self, words, requires_parameters=False, acronyms=None, acronym_scheme=None):
+        self._words = words
+        self._requires_parameters = requires_parameters
+        self._acronyms = [acronym.upper() for acronym in acronyms] if acronyms else []
+        self._acronym_scheme = acronym_scheme or AcronymScheme.upper
+
+    def get_project_name_by_scheme(self, naming):
+        """
+        gets a project name for a specific naming scheme
+
+        :param naming: the naming scheme
+        :return: the project type formatted by the directory's naming scheme
+        """
+        try:
+            return {
+                NamingScheme.hyphen: self._as_hyphen(),
+                NamingScheme.underscore: self._as_underscore(),
+                NamingScheme.camel: self._as_camel(),
+                NamingScheme.pascal: self._as_pascal(),
+                NamingScheme.lower: self._as_lower(),
+            }[naming]
+        except KeyError as e:
+            raise KeyError(f"Unknown naming scheme '{naming}'", e)
+
+    def _as_hyphen(self):
+        return '-'.join(map(self._try_as_acronym, self._words))
+
+    def _as_underscore(self):
+        return '_'.join(map(self._try_as_acronym, self._words))
+
+    def _as_camel(self):
+        return self._words[0].lower() + ''.join([self._try_as_acronym(word.title()) for word in self._words[1:]])
+
+    def _as_pascal(self):
+        return ''.join([self._try_as_acronym(word.title()) for word in self._words])
+
+    def _as_lower(self):
+        return ''.join([word.lower() for word in self._words])
+
+    def _is_acronym(self, word):
+        return word.upper() in self._acronyms
+
+    def _try_as_acronym(self, word):
+        if self._is_acronym(word):
+            if self._acronym_scheme == AcronymScheme.upper:
+                return word.upper()
+            elif self._acronym_scheme == AcronymScheme.lower:
+                return word.lower()
+            elif self._acronym_scheme == AcronymScheme.two_letter_limit:
+                if len(word) <= 2:
+                    return word.upper()
+        return word
+
+
 class ProjectType(Enum):
     Baklava = auto()
     BubbleSort = auto()
@@ -94,58 +155,3 @@ _project_words = {
 }
 
 _project_acronyms = ['lcs', 'mst', 'io']
-
-
-def get_project_type_by_name(name, case_insensitive):
-    if case_insensitive:
-        name = name.lower()
-
-    for project_type in ProjectType:
-        for naming in NamingScheme:
-            project_name = get_project_name(naming, project_type)
-            if case_insensitive:
-                project_name = project_name.lower()
-            if project_name == name:
-                return project_type
-
-    return None
-
-
-def get_project_name(naming, project_type):
-    """
-    gets a project name for a specific naming scheme
-
-    :param naming: the naming scheme
-    :param project_type: the ProjectType
-    :return: the project type formatted by the directory's naming scheme
-    """
-    return _get_project_name_from_words(naming, _project_words[project_type])
-
-
-def _get_project_name_from_words(naming, words):
-    """
-    generates a project name using the words in the project type and the directory's naming scheme
-
-    :param words: the words in the project type
-    :return: the project type formatted by the directory's naming scheme
-    """
-    if naming is NamingScheme.hyphen:
-        return '-'.join(words)
-    elif naming is NamingScheme.underscore:
-        return '_'.join(words)
-    elif naming is NamingScheme.camel:
-        return words[0].lower() + _to_pascal(words, _project_acronyms)
-    elif naming is NamingScheme.pascal:
-        return _to_pascal(words, _project_acronyms)
-    elif naming is NamingScheme.lower:
-        return ''.join(map(lambda word: word.lower(), words))
-
-
-def _to_pascal(words, acronyms):
-    def to_title(word):
-        if len(word) <= 2 and word in acronyms:
-            return word.upper()
-        return word.title()
-    return ''.join(map(to_title, words))
-
-

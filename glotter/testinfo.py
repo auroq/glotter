@@ -1,7 +1,7 @@
 import yaml
 from jinja2 import Environment, BaseLoader
 
-from glotter.project import ProjectType, NamingScheme, get_project_name
+from glotter.project import ProjectType, NamingScheme
 
 
 class ContainerInfo:
