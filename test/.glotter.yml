@@ -1,0 +1,16 @@
+projects:
+  baklava:
+    words:
+      - "baklava"
+    requires_parameters: false
+  fileio:
+    words:
+      - "file"
+      - "io"
+    requires_parameters: false
+    acronyms:
+      - "io"
+  fibonacci:
+    words:
+      - "fibonacci"
+    requires_parameters: true
