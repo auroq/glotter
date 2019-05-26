@@ -1,56 +1,5 @@
-import pytest
-
-from uuid import uuid4 as uuid
-
-from glotter.source import Source
-from glotter.testinfo import ContainerInfo
-from glotter import containerfactory
-from mockdocker import Containers, Images, DockerMock
-
-
-@pytest.fixture
-def docker():
-    docker_mock = DockerMock()
-    yield docker_mock
-    docker_mock.clear()
-
-
-@pytest.fixture
-def factory(docker):
-    return containerfactory.ContainerFactory(docker_client=docker)
-
-
-@pytest.fixture
-def container_info():
-    iid = uuid().hex
-    return ContainerInfo(
-        image=f'image_{iid}',
-        tag=f'tag_{iid}',
-        cmd=f'cmd_{iid}',
-    )
-
-
-@pytest.fixture
-def test_info_string():
-    return """folder:
-  extension: ".py"
-  naming: "underscore"
-
-container:
-  image: "python"
-  tag: "3.7-alpine"
-  cmd: "python {{ source.name }}{{ source.extension }}"
-"""
-
-
-@pytest.fixture
-def source(test_info_string):
-    iid = uuid().hex
-    return Source(
-        name=f'sourcename_{iid}',
-        path=f'sourcepath_{iid}',
-        test_info_string=test_info_string,
-    )
+from test.mockdocker import Containers, Images
+from test.fixtures import factory, container_info, source, docker, test_info_string
 
 
 def test_get_image_returns_image(factory, container_info):
