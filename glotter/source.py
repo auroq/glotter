@@ -48,7 +48,7 @@ class Source:
         return self._test_info
 
     def __repr__(self):
-        return f'Source(name: {self.name}, path: {self.path}'
+        return f'Source(name: {self.name}, path: {self.path})'
 
     def build(self, params=''):
         if self.test_info.container_info.build is not None:
@@ -87,7 +87,7 @@ class Source:
         :param command: command to run
         :return:  the exit code and output of the command
         """
-        container = ContainerFactory.get_container(self)
+        container = ContainerFactory().get_container(self)
         return container.exec_run(
             cmd=command,
             detach=False,
@@ -95,7 +95,7 @@ class Source:
         )
 
     def cleanup(self):
-        ContainerFactory.cleanup(self)
+        ContainerFactory().cleanup(self)
 
 
 def get_sources(path):
