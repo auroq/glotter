@@ -1,18 +1,32 @@
 from uuid import uuid4 as uuid
 
 
+class ContainerExec:
+    def __init__(self, cmd, attributes):
+        self.cmd = cmd
+        self._attributes = attributes
+
+    def __getitem__(self, key):
+        return self._attributes[key]
+
+
 class Container:
     def __init__(self, image, name, attributes):
         self.image = image
         self.name = name
-        self.attributes = attributes
+        self._attributes = attributes
         self.removed = False
+        self.execs = []
 
     def __getitem__(self, key):
-        return self.attributes[key]
+        return self._attributes[key]
 
     def remove(self, *args, **kwargs):
         self.removed = True
+
+    def exec_run(self, cmd, **kwargs):
+        self.execs.append(ContainerExec(cmd, kwargs))
+        return 0, 'executed'.encode('utf-8')
 
 
 class Containers:

@@ -31,7 +31,7 @@ def container_info():
 
 
 @pytest.fixture
-def test_info_string():
+def test_info_string_no_build():
     return """folder:
   extension: ".py"
   naming: "underscore"
@@ -44,10 +44,41 @@ container:
 
 
 @pytest.fixture
-def source(test_info_string):
+def test_info_string_with_build():
+    return """folder:
+  extension: ".go"
+  naming: "hyphen"
+
+container:
+  image: "golang"
+  tag: "1.12-alpine"
+  build: "go build -o {{ source.name }} {{ source.name}}{{ source.extension }}"
+  cmd: "./{{ source.name }}"
+"""
+
+
+@pytest.fixture
+def source_no_build(test_info_string_no_build):
     iid = uuid().hex
     return Source(
         name=f'sourcename_{iid}',
         path=f'sourcepath_{iid}',
-        test_info_string=test_info_string,
+        test_info_string=test_info_string_no_build,
     )
+
+
+@pytest.fixture
+def source_with_build(test_info_string_with_build):
+    iid = uuid().hex
+    return Source(
+        name=f'sourcename_{iid}',
+        path=f'sourcepath_{iid}',
+        test_info_string=test_info_string_with_build,
+    )
+
+
+@pytest.fixture
+def no_io(monkeypatch):
+    monkeypatch.setattr('tempfile.mkdtemp', lambda *args, **kwargs: 'TEMP_DIR')
+    monkeypatch.setattr('shutil.copy', lambda *args, **kwargs: '')
+    monkeypatch.setattr('shutil.rmtree', lambda *args, **kwargs: '')
