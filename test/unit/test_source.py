@@ -3,7 +3,7 @@ import pytest
 
 from glotter.source import Source
 from glotter.testinfo import TestInfo
-from test.fixtures import test_info_string_no_build, test_info_string_with_build, factory, docker, no_io, source_no_build, source_with_build
+from test.unit.fixtures import test_info_string_no_build, test_info_string_with_build, factory, docker, no_io, source_no_build, source_with_build
 
 
 def test_full_path(test_info_string_no_build):
