@@ -5,7 +5,7 @@ import pytest
 from glotter import containerfactory
 from glotter.source import Source
 from glotter.testinfo import ContainerInfo
-from test.mockdocker import DockerMock
+from test.unit.mockdocker import DockerMock
 
 
 @pytest.fixture

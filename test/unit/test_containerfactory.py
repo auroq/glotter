@@ -1,5 +1,5 @@
-from test.mockdocker import Containers, Images
-from test.fixtures import factory, container_info, source_no_build, docker, test_info_string_no_build, no_io
+from test.unit.mockdocker import Containers, Images
+from test.unit.fixtures import factory, container_info, source_no_build, docker, test_info_string_no_build, no_io
 
 
 def test_get_image_returns_image(factory, container_info):
