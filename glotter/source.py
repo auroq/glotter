@@ -3,8 +3,8 @@ import os
 import yaml
 
 from glotter import testinfo
+from glotter.settings import Settings
 from glotter.containerfactory import ContainerFactory
-from glotter.project import ProjectType
 
 
 class Source:
@@ -105,7 +105,7 @@ def get_sources(path):
     :param path: path to the directory through which to walk
     :return: a dict where the key is the ProjectType and the value is a list of all the Source objects of that project
     """
-    sources = {k: [] for k in ProjectType}
+    sources = {k: [] for k in Settings().projects_enum}
     for root, dirs, files in os.walk(path):
         path = os.path.abspath(root)
         if "testinfo.yml" in files:
