@@ -63,12 +63,8 @@ def test_parse_projects(tmp_dir, glotter_yml, glotter_yml_projects, patch_projec
     assert settings_parser.projects == glotter_yml_projects
 
 
-def test_parse_projects_when_yml_contains_projects_not_in_enum(
-        tmp_dir,
-        glotter_yml,
-        glotter_yml_projects,
-        patch_projects_enum,
-        monkeypatch):
+def test_parse_projects_when_yml_contains_projects_not_in_enum(tmp_dir, glotter_yml, glotter_yml_projects,
+                                                               patch_projects_enum, monkeypatch):
     path = os.path.join(tmp_dir, '.glotter.yml')
     glotter_yml += """
   nonexistantproject:

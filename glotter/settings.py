@@ -7,6 +7,7 @@ from warnings import warn
 
 from glotter.project import Project, AcronymScheme
 from glotter.containerfactory import Singleton
+from glotter.projecthelpers import enum_from_string
 
 
 def projects_enum(cls):
@@ -23,6 +24,14 @@ class Settings(metaclass=Singleton):
         self._parser = SettingsParser(self._project_root)
 
     @property
+    def projects(self):
+        return self._parser.projects
+
+    @property
+    def project_root(self):
+        return self._project_root
+
+    @property
     def projects_enum(self):
         return self._projects_enum
 
@@ -33,6 +42,10 @@ class Settings(metaclass=Singleton):
             raise AttributeError('projects_enum value must be a subclass of enum.Enum')
         self._projects_enum = cls
         self._parser.parse()
+
+    @classmethod
+    def get_project_by_name(cls, name):
+        return enum_from_string(name, cls().projects_enum)
 
 
 class SettingsParser:
@@ -76,19 +89,12 @@ class SettingsParser:
         scheme = self._yml['settings']['acronym_scheme'].lower()
         return AcronymScheme[scheme]
 
-    def _enum_from_string(self, name):
-        proj_enum = Settings().projects_enum
-        for i in proj_enum:
-            if name == i.name.lower():
-                return i
-        raise KeyError(f'projects_enum does not contain name "{name}"')
-
     def _parse_projects(self):
         projects = {}
         if 'projects' in self._yml:
             for k, v in self._yml['projects'].items():
                 try:
-                    project_name = self._enum_from_string(name=k)
+                    project_name = enum_from_string(name=k, enum_cls=Settings().projects_enum)
                     project = Project(
                         words=v.get('words'),
                         requires_parameters=v.get('requires_parameters'),

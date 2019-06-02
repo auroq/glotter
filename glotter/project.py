@@ -76,88 +76,88 @@ class Project:
                self._acronym_scheme == other._acronym_scheme
 
 
-class ProjectType(Enum):
-    Baklava = auto()
-    BubbleSort = auto()
-    ConvexHull = auto()
-    EvenOdd = auto()
-    Factorial = auto()
-    Fibonacci = auto()
-    FileIO = auto()
-    FizzBuzz = auto()
-    HelloWorld = auto()
-    InsertionSort = auto()
-    JobSequencing = auto()
-    LCS = auto()
-    MergeSort = auto()
-    MST = auto()
-    Prime = auto()
-    QuickSort = auto()
-    Quine = auto()
-    ROT13 = auto()
-    ReverseString = auto()
-    RomanNumeral = auto()
-    SelectionSort = auto()
-
-
-sorting_types = [
-    ProjectType.BubbleSort,
-    ProjectType.InsertionSort,
-    ProjectType.MergeSort,
-    ProjectType.QuickSort,
-    ProjectType.SelectionSort
-]
-
-
-def requires_params(project):
-    project_mapping = {
-        ProjectType.Baklava: False,
-        ProjectType.BubbleSort: True,
-        ProjectType.ConvexHull: True,
-        ProjectType.EvenOdd: True,
-        ProjectType.Factorial: True,
-        ProjectType.Fibonacci: True,
-        ProjectType.FileIO: False,
-        ProjectType.FizzBuzz: False,
-        ProjectType.HelloWorld: False,
-        ProjectType.InsertionSort: True,
-        ProjectType.JobSequencing: True,
-        ProjectType.LCS: True,
-        ProjectType.MergeSort: True,
-        ProjectType.MST: True,
-        ProjectType.Prime: True,
-        ProjectType.QuickSort: True,
-        ProjectType.Quine: False,
-        ProjectType.ROT13: True,
-        ProjectType.ReverseString: True,
-        ProjectType.RomanNumeral: True,
-        ProjectType.SelectionSort: True,
-    }
-    return project_mapping[project]
-
-
-_project_words = {
-    ProjectType.Baklava: ['baklava'],
-    ProjectType.BubbleSort: ['bubble', 'sort'],
-    ProjectType.ConvexHull: ['convex', 'hull'],
-    ProjectType.EvenOdd: ['even', 'odd'],
-    ProjectType.Factorial: ['factorial'],
-    ProjectType.Fibonacci: ['fibonacci'],
-    ProjectType.FileIO: ['file', 'io'],
-    ProjectType.FizzBuzz: ['fizz', 'buzz'],
-    ProjectType.HelloWorld: ['hello', 'world'],
-    ProjectType.InsertionSort: ['insertion', 'sort'],
-    ProjectType.JobSequencing: ['job', 'sequencing'],
-    ProjectType.LCS: ['lcs'],
-    ProjectType.MergeSort: ['merge', 'sort'],
-    ProjectType.MST: ['mst'],
-    ProjectType.Prime: ['prime', 'number'],
-    ProjectType.QuickSort: ['quick', 'sort'],
-    ProjectType.Quine: ['quine'],
-    ProjectType.ROT13: ['rot', '13'],
-    ProjectType.ReverseString: ['reverse', 'string'],
-    ProjectType.RomanNumeral: ['roman', 'numeral'],
-    ProjectType.SelectionSort: ['selection', 'sort'],
-}
-
-_project_acronyms = ['lcs', 'mst', 'io']
+# class ProjectType(Enum):
+#     Baklava = auto()
+#     BubbleSort = auto()
+#     ConvexHull = auto()
+#     EvenOdd = auto()
+#     Factorial = auto()
+#     Fibonacci = auto()
+#     FileIO = auto()
+#     FizzBuzz = auto()
+#     HelloWorld = auto()
+#     InsertionSort = auto()
+#     JobSequencing = auto()
+#     LCS = auto()
+#     MergeSort = auto()
+#     MST = auto()
+#     Prime = auto()
+#     QuickSort = auto()
+#     Quine = auto()
+#     ROT13 = auto()
+#     ReverseString = auto()
+#     RomanNumeral = auto()
+#     SelectionSort = auto()
+#
+#
+# sorting_types = [
+#     ProjectType.BubbleSort,
+#     ProjectType.InsertionSort,
+#     ProjectType.MergeSort,
+#     ProjectType.QuickSort,
+#     ProjectType.SelectionSort
+# ]
+#
+#
+# def requires_params(project):
+#     project_mapping = {
+#         ProjectType.Baklava: False,
+#         ProjectType.BubbleSort: True,
+#         ProjectType.ConvexHull: True,
+#         ProjectType.EvenOdd: True,
+#         ProjectType.Factorial: True,
+#         ProjectType.Fibonacci: True,
+#         ProjectType.FileIO: False,
+#         ProjectType.FizzBuzz: False,
+#         ProjectType.HelloWorld: False,
+#         ProjectType.InsertionSort: True,
+#         ProjectType.JobSequencing: True,
+#         ProjectType.LCS: True,
+#         ProjectType.MergeSort: True,
+#         ProjectType.MST: True,
+#         ProjectType.Prime: True,
+#         ProjectType.QuickSort: True,
+#         ProjectType.Quine: False,
+#         ProjectType.ROT13: True,
+#         ProjectType.ReverseString: True,
+#         ProjectType.RomanNumeral: True,
+#         ProjectType.SelectionSort: True,
+#     }
+#     return project_mapping[project]
+#
+#
+# _project_words = {
+#     ProjectType.Baklava: ['baklava'],
+#     ProjectType.BubbleSort: ['bubble', 'sort'],
+#     ProjectType.ConvexHull: ['convex', 'hull'],
+#     ProjectType.EvenOdd: ['even', 'odd'],
+#     ProjectType.Factorial: ['factorial'],
+#     ProjectType.Fibonacci: ['fibonacci'],
+#     ProjectType.FileIO: ['file', 'io'],
+#     ProjectType.FizzBuzz: ['fizz', 'buzz'],
+#     ProjectType.HelloWorld: ['hello', 'world'],
+#     ProjectType.InsertionSort: ['insertion', 'sort'],
+#     ProjectType.JobSequencing: ['job', 'sequencing'],
+#     ProjectType.LCS: ['lcs'],
+#     ProjectType.MergeSort: ['merge', 'sort'],
+#     ProjectType.MST: ['mst'],
+#     ProjectType.Prime: ['prime', 'number'],
+#     ProjectType.QuickSort: ['quick', 'sort'],
+#     ProjectType.Quine: ['quine'],
+#     ProjectType.ROT13: ['rot', '13'],
+#     ProjectType.ReverseString: ['reverse', 'string'],
+#     ProjectType.RomanNumeral: ['roman', 'numeral'],
+#     ProjectType.SelectionSort: ['selection', 'sort'],
+# }
+#
+# _project_acronyms = ['lcs', 'mst', 'io']

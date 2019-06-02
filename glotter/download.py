@@ -2,7 +2,7 @@ import os
 import sys
 
 from glotter.source import get_sources
-from glotter.project import get_project_type_by_name
+from glotter.settings import Settings
 from glotter.containerfactory import ContainerFactory
 
 
@@ -49,7 +49,7 @@ def _download_language(language):
 
 def _download_project(project):
     sources_by_type = get_sources(_get_archive_path())
-    project_type = get_project_type_by_name(project, case_insensitive=True)
+    project_type = Settings.get_project_by_name(project, case_insensitive=True)
     if project_type is None or project_type not in sources_by_type:
         _error_and_exit(f'No valid sources found for project: "{project}"')
     sources = sources_by_type[project_type]

@@ -26,6 +26,11 @@ projects:
     words:
       - "fibonacci"
     requires_parameters: true
+  helloworld:
+    words:
+      - "hello"
+      - "world"
+    requires_parameters: false
 """
 
 
@@ -44,7 +49,11 @@ def glotter_yml_projects():
         MockProjectEnum.Fibonacci: Project(
             words=["fibonacci"],
             requires_parameters=True
-        )
+        ),
+        MockProjectEnum.HelloWorld: Project(
+            words=["hello", "world"],
+            requires_parameters=False
+        ),
     }
 
 
@@ -86,6 +95,7 @@ class MockProjectEnum(Enum):
     Baklava = auto()
     FileIO = auto()
     Fibonacci = auto()
+    HelloWorld = auto()
 
 
 @pytest.fixture
