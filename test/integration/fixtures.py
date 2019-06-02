@@ -1,7 +1,8 @@
 import shutil
 import tempfile
-
 import pytest
+
+from enum import Enum, auto
 
 from glotter.project import Project
 
@@ -31,16 +32,16 @@ projects:
 @pytest.fixture
 def glotter_yml_projects():
     return {
-        "baklava": Project(
+        MockProjectEnum.Baklava: Project(
             words=["baklava"],
             requires_parameters=False,
         ),
-        "fileio": Project(
+        MockProjectEnum.FileIO: Project(
             words=["file", "io"],
             requires_parameters=False,
             acronyms=["io"]
         ),
-        "fibonacci": Project(
+        MockProjectEnum.Fibonacci: Project(
             words=["fibonacci"],
             requires_parameters=True
         )
@@ -79,3 +80,15 @@ def tmp_dir():
     dir = tempfile.mkdtemp()
     yield dir
     shutil.rmtree(dir, ignore_errors=True)
+
+
+class MockProjectEnum(Enum):
+    Baklava = auto()
+    FileIO = auto()
+    Fibonacci = auto()
+
+
+@pytest.fixture
+def patch_projects_enum(monkeypatch):
+    monkeypatch.setattr('glotter.settings.Settings.projects_enum', MockProjectEnum)
+
