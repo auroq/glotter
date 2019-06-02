@@ -69,6 +69,12 @@ class Project:
                     return word.upper()
         return word
 
+    def __eq__(self, other):
+        return self._words == other._words and \
+               self._requires_parameters == other._requires_parameters and \
+               self._acronyms == other._acronyms and \
+               self._acronym_scheme == other._acronym_scheme
+
 
 class ProjectType(Enum):
     Baklava = auto()

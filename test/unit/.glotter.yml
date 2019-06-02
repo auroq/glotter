@@ -1,3 +1,6 @@
+settings:
+  acronym_scheme: "two_letter_limit"
+
 projects:
   baklava:
     words:
