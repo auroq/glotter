@@ -5,7 +5,7 @@ import tempfile
 from datetime import datetime, timedelta
 from uuid import uuid4 as uuid
 
-from singleton import Singleton
+from glotter.singleton import Singleton
 
 
 class ContainerFactory(metaclass=Singleton):
