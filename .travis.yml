@@ -10,9 +10,10 @@ script:
 - pytest test/unit
 - pytest test/integration
 before_deploy:
-  - sed -i "s/\${VERSION}/0.0.$TRAVIS_BUILD_NUMBER/g" setup.py
+  - sed -i "s/\${VERSION}/$PACKAGE_VERSION/g" setup.py
   - cat setup.py
 deploy:
+  skip_cleanup: true
   provider: pypi
   user: auroq
   password:
