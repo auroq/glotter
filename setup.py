@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='glotter',
-    version='0.0.1',
+    version='${VERSION}',
     entry_points={'console_scripts': ['glotter = glotter.__main__:main']},
     packages=find_packages(exclude=('test',)),
     install_requires=[
