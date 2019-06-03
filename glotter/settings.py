@@ -22,6 +22,7 @@ class Settings(metaclass=Singleton):
         self._projects_enum = None
         self._project_root = os.path.dirname(sys.modules['__main__'].__file__)
         self._parser = SettingsParser(self._project_root)
+        self._source_root = self._project_root
 
     @property
     def projects(self):
@@ -30,6 +31,14 @@ class Settings(metaclass=Singleton):
     @property
     def project_root(self):
         return self._project_root
+
+    @property
+    def source_root(self):
+        return self._source_root
+
+    @source_root.setter
+    def source_root(self, value):
+        self._source_root = value or self._project_root
 
     @property
     def projects_enum(self):
@@ -44,7 +53,7 @@ class Settings(metaclass=Singleton):
         self._parser.parse()
 
     @classmethod
-    def get_project_by_name(cls, name):
+    def get_project_type_by_name(cls, name):
         return enum_from_string(name, cls().projects_enum)
 
 
