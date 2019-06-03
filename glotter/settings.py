@@ -15,6 +15,12 @@ def projects_enum(cls):
     if not issubclass(cls, Enum):
         raise AttributeError('projects_enum must be called on a subclass of enum.Enum')
     settings.set_projects_enum(cls)
+    return cls
+
+
+def project_test(func, project_type):
+    Settings().add_test_mapping(project_type, func)
+    return func
 
 
 class Settings(metaclass=Singleton):
@@ -23,6 +29,7 @@ class Settings(metaclass=Singleton):
         self._project_root = os.path.dirname(sys.modules['__main__'].__file__)
         self._parser = SettingsParser(self._project_root)
         self._source_root = self._project_root
+        self._test_mappings = {}
 
     @property
     def projects(self):
@@ -41,8 +48,15 @@ class Settings(metaclass=Singleton):
         self._source_root = value or self._project_root
 
     @property
+    def test_mappings(self):
+        return self._test_mappings
+
+    @property
     def projects_enum(self):
         return self._projects_enum
+
+    def get_test_mapping_name(self, project_type):
+        return self._test_mappings[project_type].__name__
 
     def set_projects_enum(self, cls):
         if self._projects_enum is not None:
@@ -51,6 +65,11 @@ class Settings(metaclass=Singleton):
             raise AttributeError('projects_enum value must be a subclass of enum.Enum')
         self._projects_enum = cls
         self._parser.parse()
+
+    def add_test_mapping(self, project_type, func):
+        if project_type not in self._test_mappings:
+            self._test_mappings[project_type] = []
+        self._test_mappings[project_type].append(func)
 
     @classmethod
     def get_project_type_by_name(cls, name):

@@ -1,9 +1,10 @@
+import re
 import os
 import sys
 import pytest
 
 from glotter.source import get_sources
-from settings import Settings
+from glotter.settings import Settings
 
 
 def test(args):
@@ -22,10 +23,10 @@ def _error_and_exit(msg):
     sys.exit(1)
 
 
-def _get_tests(src, project_type, all_tests):
-    filename = f'{src.name}{src.extension}'
-    test_module_name = f'test/projects/{_module_mappings[project_type]}.py'
-    return [tst for tst in all_tests if tst.startswith(test_module_name) and f'[{filename}' in tst]
+def _get_tests(project_type, all_tests):
+    test_function = Settings().get_test_mapping_name(project_type)
+    pattern = rf'^(\w/?)*\.py::{test_function}\[.+\]$'
+    return [tst for tst in all_tests if re.fullmatch(pattern, tst) is not None]
 
 
 def _run_all():
@@ -47,7 +48,8 @@ def _run_language(language):
 def _run_project(project):
     try:
         project_type = Settings().get_project_type_by_name(project)
-        _run_pytest_and_exit(f'test/projects/{_module_mappings[project_type]}.py')
+        tests = _get_tests(project_type, _collect_tests())
+        _run_pytest_and_exit(*tests)
     except KeyError:
         _error_and_exit(f'No valid sources found for project: "{project}"')
 
@@ -90,27 +92,3 @@ def _collect_tests():
     pytest.main(['-qq', '--collect-only'], plugins=[plugin])
     return plugin.collected
 
-
-_module_mappings = {
-    ProjectType.Baklava: 'test_baklava',
-    ProjectType.BubbleSort: 'test_sorting',
-    ProjectType.ConvexHull: 'test_convex_hull',
-    ProjectType.EvenOdd: 'test_even_odd',
-    ProjectType.Factorial: 'test_factorial',
-    ProjectType.Fibonacci: 'test_fibonacci',
-    ProjectType.FileIO: 'test_file_io',
-    ProjectType.FizzBuzz: 'test_fizz_buzz',
-    ProjectType.HelloWorld: 'test_hello_world',
-    ProjectType.InsertionSort: 'test_sorting',
-    ProjectType.JobSequencing: 'test_job_sequencing',
-    ProjectType.LCS: 'test_lcs',
-    ProjectType.MergeSort: 'test_sorting',
-    ProjectType.MST: 'test_mst',
-    ProjectType.Prime: 'test_prime',
-    ProjectType.QuickSort: 'test_sorting',
-    ProjectType.Quine: 'test_quine',
-    ProjectType.ROT13: 'test_rot_13',
-    ProjectType.ReverseString: 'test_reverse_string',
-    ProjectType.RomanNumeral: 'test_roman_numeral',
-    ProjectType.SelectionSort: 'test_sorting',
-}
