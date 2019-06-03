@@ -1,1 +1,1 @@
-from settings import Settings, projects_enum, project_test
+from glotter.settings import Settings, projects_enum, project_test
