@@ -49,12 +49,13 @@ def _download_language(language):
 
 def _download_project(project):
     sources_by_type = get_sources(_get_archive_path())
-    project_type = Settings.get_project_by_name(project, case_insensitive=True)
-    if project_type is None or project_type not in sources_by_type:
+    try:
+        project_type = Settings.get_project_type_by_name(project)
+        sources = sources_by_type[project_type]
+        for source in sources:
+            _download_image_from_source(source)
+    except KeyError:
         _error_and_exit(f'No valid sources found for project: "{project}"')
-    sources = sources_by_type[project_type]
-    for source in sources:
-        _download_image_from_source(source)
 
 
 def _download_source(source):

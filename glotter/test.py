@@ -3,7 +3,7 @@ import sys
 import pytest
 
 from glotter.source import get_sources
-from glotter.project import get_project_type_by_name, ProjectType
+from settings import Settings
 
 
 def test(args):
@@ -45,8 +45,11 @@ def _run_language(language):
 
 
 def _run_project(project):
-    project_type = get_project_type_by_name(project, case_insensitive=True)
-    _run_pytest_and_exit(f'test/projects/{_module_mappings[project_type]}.py')
+    try:
+        project_type = Settings().get_project_type_by_name(project)
+        _run_pytest_and_exit(f'test/projects/{_module_mappings[project_type]}.py')
+    except KeyError:
+        _error_and_exit(f'No valid sources found for project: "{project}"')
 
 
 def _run_source(source):

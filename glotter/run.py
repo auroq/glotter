@@ -2,7 +2,7 @@ import os
 import sys
 
 from glotter.source import get_sources
-from glotter.project import requires_params, get_project_type_by_name
+from glotter.settings import Settings
 
 
 def run(args):
@@ -16,13 +16,8 @@ def run(args):
         _run_all()
 
 
-def _get_archive_path():
-    path_to_directory_containing_this_file = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(path_to_directory_containing_this_file, '..', 'archive')
-
-
 def _prompt_params(project_type):
-    if not requires_params(project_type):
+    if not Settings().projects[project_type].requires_params:
         return ''
     return input(f'input parameters for "{project_type}": ')
 
@@ -40,7 +35,7 @@ def _error_and_exit(msg):
 
 
 def _run_all():
-    sources_by_type = get_sources(_get_archive_path())
+    sources_by_type = get_sources(Settings().source_root)
     for project_type, sources in sources_by_type.items():
         params = _prompt_params(project_type)
         for source in sources:
@@ -48,7 +43,7 @@ def _run_all():
 
 
 def _run_language(language):
-    sources_by_type = get_sources(path=os.path.join(_get_archive_path(), language[0], language))
+    sources_by_type = get_sources(path=os.path.join(Settings().source_root, language[0], language))
     if all([len(sources) <= 0 for _, sources in sources_by_type.items()]):
         _error_and_exit(f'No valid sources found for language: "{language}"')
     for project_type, sources in sources_by_type.items():
@@ -58,18 +53,19 @@ def _run_language(language):
 
 
 def _run_project(project):
-    sources_by_type = get_sources(_get_archive_path())
-    project_type = get_project_type_by_name(project, case_insensitive=True)
-    if project_type is None or project_type not in sources_by_type:
+    sources_by_type = get_sources(Settings().source_root)
+    try:
+        project_type = Settings().get_project_type_by_name(project)
+        sources = sources_by_type[project_type]
+        params = _prompt_params(project_type)
+        for source in sources:
+            _build_and_run(source, params)
+    except KeyError:
         _error_and_exit(f'No valid sources found for project: "{project}"')
-    sources = sources_by_type[project_type]
-    params = _prompt_params(project_type)
-    for source in sources:
-        _build_and_run(source, params)
 
 
 def _run_source(source):
-    sources_by_type = get_sources(_get_archive_path())
+    sources_by_type = get_sources(Settings().source_root)
     for project_type, sources in sources_by_type.items():
         for src in sources:
             if f'{src.name}{src.extension}'.lower() == source.lower():
