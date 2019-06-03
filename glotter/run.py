@@ -17,7 +17,7 @@ def run(args):
 
 
 def _prompt_params(project_type):
-    if not Settings().projects[project_type].requires_params:
+    if not Settings().projects[project_type].requires_parameters:
         return ''
     return input(f'input parameters for "{project_type}": ')
 
