@@ -11,6 +11,7 @@ script:
 - pytest test/integration
 before_deploy:
   - sed -i "s/\${VERSION}/0.0.$TRAVIS_BUILD_NUMBER/g" setup.py
+  - cat setup.py
 deploy:
   provider: pypi
   user: auroq
