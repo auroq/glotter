@@ -22,6 +22,22 @@ class Project:
         self._acronyms = [acronym.upper() for acronym in acronyms] if acronyms else []
         self._acronym_scheme = acronym_scheme or AcronymScheme.upper
 
+    @property
+    def words(self):
+        return self._words
+
+    @property
+    def requires_parameters(self):
+        return self._requires_parameters
+
+    @property
+    def acronyms(self):
+        return self._acronyms
+
+    @property
+    def acronym_scheme(self):
+        return self.acronym_scheme
+
     def get_project_name_by_scheme(self, naming):
         """
         gets a project name for a specific naming scheme
