@@ -36,7 +36,7 @@ class Project:
 
     @property
     def acronym_scheme(self):
-        return self.acronym_scheme
+        return self._acronym_scheme
 
     def get_project_name_by_scheme(self, naming):
         """
