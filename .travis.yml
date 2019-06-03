@@ -1,9 +1,14 @@
 dist: xenial
 language: python
 python:
-  - "3.7"
-install: 
-  - pip install -r requirements.txt
+- '3.7'
+install:
+- pip install -r requirements.txt
 script:
-  - pytest test/unit
-  - pytest test/integration
+- pytest test/unit
+- pytest test/integration
+deploy:
+  provider: pypi
+  user: auroq
+  password:
+    secure: cPl0yHYoL0bLOzbJLH7rg/yzexuqIDHNTKQ4/kG16uLRHMWtVcrc/9ovg0mOk89uG3KHUF2UKhyOqOZ37eYVWEmwyzWU7AYOaexil2aoJz3sCvpPvOVK8L1dD6apMMcplA1NOFvlDxhoOxB+PPZaMnCYuuW/yKV6w8kuPGPFk3L99pcy5N266l0vBhlJ5mGb3paSIMitilZLUWuicg7g2/IVfLW20RllFLxM5Dm4Ngg4fgQDSo4Qx+S6dh5wX2Dg+RtrGCT0HKHNYaoyJzXFTReEt2ekAyORHgfKcErwWM5cW0coPSNihlMeiXDpKNFn8WRfXbdBysaiwAQXNMpY5PJpoFl55HadoFFP13AkiqW26col0/Qr1BtzcpwKZ64+xXc//f+cu7nQsUheI0DaXRPPjC1Feuj2tWWeahFfWmfhYzNpWmhZCRUhotCHrrp2+EE1hkqxMM2AXRKKJWV/xxlSuRNwpStiPNKOTAH1cGncMbVuOlf3cqOvB7uAm9dJ0NXjttGw0lp2EKgUFeEaPBde557Rw8HAvIM4Zg6IZ0vhKaMozScZhdmZc8KcDi0QnHPDsNmZpmGb63dlSbv8v3V9sR+jecwgZikjYOt9Q8FoR1MP3iw3qHyD/j7dHn57ve6AhxeoXriGWUKL9bNZhIYSRMdRaD4yOHbezurNF7I=
