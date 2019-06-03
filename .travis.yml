@@ -1,7 +1,7 @@
 dist: xenial
 language: python
 env:
-  - PACKAGE_VERSION="0.0.${TRAVIS_BUILD_NUMBER}"
+  - PACKAGE_VERSION="0.0.$TRAVIS_BUILD_NUMBER"
 python:
 - '3.7'
 install:
@@ -10,7 +10,7 @@ script:
 - pytest test/unit
 - pytest test/integration
 before_deploy:
-  - sed -i "s/\${VERSION}/${PACKAGE_VERSION}/g" setup.py
+  - sed -i "s/\${VERSION}/0.0.$TRAVIS_BUILD_NUMBER/g" setup.py
 deploy:
   provider: pypi
   user: auroq
