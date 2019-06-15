@@ -86,6 +86,7 @@ class SettingsParser:
         self._yml_path = self._locate_yml()
         if self._yml_path is not None:
             self._yml = self._parse_yml()
+            self.parse_settings_section()
         else:
             warn(f'.glotter.yml not found in directory "{project_root}"')
 
