@@ -18,7 +18,7 @@ def download(args):
 
 
 def _download_image_from_source(source):
-    ContainerFactory.get_image(source.test_info.container_info)
+    ContainerFactory().get_image(source.test_info.container_info)
 
 
 def _error_and_exit(msg):
