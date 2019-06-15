@@ -23,9 +23,13 @@ def _error_and_exit(msg):
     sys.exit(1)
 
 
-def _get_tests(project_type, all_tests):
+def _get_tests(project_type, all_tests, src=None):
     test_function = Settings().get_test_mapping_name(project_type)
-    pattern = rf'^(\w/?)*\.py::{test_function}\[.+\]$'
+    if src is not None:
+        filename = f'{src.name}{src.extension}'
+        pattern = rf'^(\w/?)*\.py::{test_function}\[{filename}.*\]$'
+    else:
+        pattern = rf'^(\w/?)*\.py::{test_function}\[.+\]$'
     return [tst for tst in all_tests if re.fullmatch(pattern, tst) is not None]
 
 
@@ -41,7 +45,7 @@ def _run_language(language):
     tests = []
     for project_type, sources in sources_by_type.items():
         for src in sources:
-            tests += _get_tests(src, project_type, all_tests)
+            tests += _get_tests(project_type, all_tests, src)
     _run_pytest_and_exit(*tests)
 
 
@@ -61,7 +65,7 @@ def _run_source(source):
         for src in sources:
             filename = f'{src.name}{src.extension}'
             if filename.lower() == source.lower():
-                tests = _get_tests(src, project_type, all_tests)
+                tests = _get_tests(project_type, all_tests, src)
                 _run_pytest_and_exit(*tests)
                 break
         else:  # If didn't break inner loop continue
