@@ -1,5 +1,4 @@
 import os
-import sys
 import yaml
 
 from enum import Enum
@@ -26,9 +25,9 @@ def project_test(func, project_type):
 class Settings(metaclass=Singleton):
     def __init__(self):
         self._projects_enum = None
-        self._project_root = os.path.dirname(sys.modules['__main__'].__file__)
+        self._project_root = os.getcwd()
         self._parser = SettingsParser(self._project_root)
-        self._source_root = self._project_root
+        self._source_root = self._parser.source_root or self._project_root
         self._test_mappings = {}
 
     @property
@@ -64,7 +63,7 @@ class Settings(metaclass=Singleton):
         if not issubclass(cls, Enum):
             raise AttributeError('projects_enum value must be a subclass of enum.Enum')
         self._projects_enum = cls
-        self._parser.parse()
+        self._parser.parse_projects_section()
 
     def add_test_mapping(self, project_type, func):
         if project_type not in self._test_mappings:
@@ -83,12 +82,20 @@ class SettingsParser:
         self._yml = None
         self._acronym_scheme = None
         self._projects = None
-
-    def parse(self):
+        self._source_root = None
         self._yml_path = self._locate_yml()
         if self._yml_path is not None:
             self._yml = self._parse_yml()
+        else:
+            warn(f'.glotter.yml not found in directory "{project_root}"')
+
+    def parse_settings_section(self):
+        if self._yml is not None:
             self._acronym_scheme = self._parse_acronym_scheme()
+            self._source_root = self._parse_source_root()
+
+    def parse_projects_section(self):
+        if self.yml is not None:
             self._projects = self._parse_projects()
 
     @property
@@ -104,6 +111,10 @@ class SettingsParser:
         return self._yml
 
     @property
+    def source_root(self):
+        return self._source_root
+
+    @property
     def acronym_scheme(self):
         return self._acronym_scheme
 
@@ -114,10 +125,26 @@ class SettingsParser:
     def _parse_acronym_scheme(self):
         if 'settings' not in self._yml or 'acronym_scheme' not in self._yml['settings']:
             return
+
         scheme = self._yml['settings']['acronym_scheme'].lower()
         return AcronymScheme[scheme]
 
+    def _parse_source_root(self):
+        if 'settings' not in self._yml or 'source_root' not in self._yml['settings']:
+            return
+
+        path = self._yml['settings']['source_root']
+        if os.path.isabs(path):
+            return path
+
+        yml_dir = os.path.dirname(self._yml_path)
+        return os.path.abspath(os.path.join(yml_dir, path))
+
     def _parse_projects(self):
+        if Settings().projects_enum is None:
+            warn(f'Projects enum has not been set')
+            return None
+
         projects = {}
         if 'projects' in self._yml:
             for k, v in self._yml['projects'].items():
@@ -132,7 +159,6 @@ class SettingsParser:
                     projects[project_name] = project
                 except KeyError:
                     warn(f'.glotter.yml contains a project that is not found in the projects_enum: "{k}"')
-                    pass  # Ignore project
 
         return projects
 
