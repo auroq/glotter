@@ -4,7 +4,7 @@ from enum import Enum
 import pytest
 
 from glotter import Settings
-from source import get_sources
+from glotter.source import get_sources
 
 
 def projects_enum(cls):
