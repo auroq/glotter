@@ -1,7 +1,7 @@
-import functools
-from enum import Enum
-
 import pytest
+import functools
+
+from enum import Enum
 
 from glotter import Settings
 from glotter.source import get_sources
@@ -18,22 +18,17 @@ def projects_enum(cls):
 def project_test(project_type):
     def decorator(func):
         @functools.wraps(func)
-        def wrapper(func):
+        def wrapper(*args, **kwargs):
             Settings().add_test_mapping(project_type, func)
-            return func
+            return func(*args, **kwargs)
         return wrapper
     return decorator
 
 
 def project_fixture(project_type):
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(func):
-            sources = get_sources(Settings().source_root).get(project_type)
-            return pytest.fixture(
-                scope='module',
-                params=sources,
-                ids=[source.name + source.extension for source in sources],
-            )
-        return wrapper
-    return decorator
+    sources = get_sources(Settings().source_root).get(project_type)
+    return pytest.fixture(
+        scope='module',
+        params=sources,
+        ids=[source.name + source.extension for source in sources],
+    )
