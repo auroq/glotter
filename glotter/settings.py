@@ -45,7 +45,7 @@ class Settings(metaclass=Singleton):
         return self._test_mappings[project_type].__name__
 
     def set_projects_enum(self, cls):
-        if self._projects_enum is not None:
+        if self._projects_enum is not None and cls != self._projects_enum:
             raise AttributeError('Cannot set projects_enum more than once')
         if not issubclass(cls, Enum):
             raise AttributeError('projects_enum value must be a subclass of enum.Enum')
