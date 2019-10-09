@@ -1,17 +1,14 @@
 import os
 import yaml
 
-from enum import Enum
 from warnings import warn
 
 from glotter.project import Project, AcronymScheme
 from glotter.containerfactory import Singleton
-from glotter.projecthelpers import enum_from_string
 
 
 class Settings(metaclass=Singleton):
     def __init__(self):
-        self._projects_enum = None
         self._project_root = os.getcwd()
         self._parser = SettingsParser(self._project_root)
         self._source_root = self._parser.source_root or self._project_root
@@ -37,29 +34,19 @@ class Settings(metaclass=Singleton):
     def test_mappings(self):
         return self._test_mappings
 
-    @property
-    def projects_enum(self):
-        return self._projects_enum
-
     def get_test_mapping_name(self, project_type):
         return self._test_mappings[project_type].__name__
-
-    def set_projects_enum(self, cls):
-        if self._projects_enum is not None and cls != self._projects_enum:
-            raise AttributeError('Cannot set projects_enum more than once')
-        if not issubclass(cls, Enum):
-            raise AttributeError('projects_enum value must be a subclass of enum.Enum')
-        self._projects_enum = cls
-        self._parser.parse_projects_section()
 
     def add_test_mapping(self, project_type, func):
         if project_type not in self._test_mappings:
             self._test_mappings[project_type] = []
         self._test_mappings[project_type].append(func)
 
-    @classmethod
-    def get_project_type_by_name(cls, name):
-        return enum_from_string(name, cls().projects_enum)
+    def get_project_type_by_name(self, name):
+        try:
+            return self.projects[name.lower()]
+        except KeyError as e:
+            raise Exception(f'glotter.yml does not contain project name "{name}"', e)
 
 
 class SettingsParser:
@@ -74,6 +61,7 @@ class SettingsParser:
         if self._yml_path is not None:
             self._yml = self._parse_yml()
             self.parse_settings_section()
+            self.parse_projects_section()
         else:
             warn(f'.glotter.yml not found in directory "{project_root}"')
 
@@ -129,24 +117,17 @@ class SettingsParser:
         return os.path.abspath(os.path.join(yml_dir, path))
 
     def _parse_projects(self):
-        if Settings().projects_enum is None:
-            warn(f'Projects enum has not been set')
-            return None
-
         projects = {}
         if 'projects' in self._yml:
             for k, v in self._yml['projects'].items():
-                try:
-                    project_name = enum_from_string(name=k, enum_cls=Settings().projects_enum)
-                    project = Project(
-                        words=v.get('words'),
-                        requires_parameters=v.get('requires_parameters'),
-                        acronyms=v.get('acronyms'),
-                        acronym_scheme=v.get('acronym_scheme') or self._acronym_scheme,
-                    )
-                    projects[project_name] = project
-                except KeyError:
-                    warn(f'.glotter.yml contains a project that is not found in the projects_enum: "{k}"')
+                project_name = k.lower()
+                project = Project(
+                    words=v.get('words'),
+                    requires_parameters=v.get('requires_parameters'),
+                    acronyms=v.get('acronyms'),
+                    acronym_scheme=v.get('acronym_scheme') or self._acronym_scheme,
+                )
+                projects[project_name] = project
 
         return projects
 

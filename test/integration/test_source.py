@@ -3,7 +3,7 @@ import os
 from glotter import source
 
 from test.integration.fixtures import tmp_dir, test_info_string_no_build, test_info_string_with_build, \
-    patch_projects_enum, glotter_yml_projects, MockProjectEnum
+    glotter_yml_projects, mock_projects
 
 
 def get_hello_world(language):
@@ -25,7 +25,8 @@ def create_files_from_list(files):
 
 
 def test_get_sources_when_no_testinfo(tmp_dir, test_info_string_no_build, test_info_string_with_build,
-                                      patch_projects_enum):
+                                      mock_projects):
+
     files = {
         os.path.join(tmp_dir, 'python', 'helloworld.py'): get_hello_world('python'),
         os.path.join(tmp_dir, 'go', 'hello-world.go'): get_hello_world('go'),
@@ -35,9 +36,8 @@ def test_get_sources_when_no_testinfo(tmp_dir, test_info_string_no_build, test_i
     assert not any(v for _, v in sources.items())
 
 
-def test_get_sources(tmp_dir, test_info_string_no_build, test_info_string_with_build, patch_projects_enum,
-                     glotter_yml_projects, monkeypatch):
-    monkeypatch.setattr('glotter.settings.Settings.projects', glotter_yml_projects)
+def test_get_sources(tmp_dir, test_info_string_no_build, test_info_string_with_build, glotter_yml_projects,
+                     monkeypatch, mock_projects):
     files = {
         os.path.join(tmp_dir, 'python', 'testinfo.yml'): test_info_string_no_build,
         os.path.join(tmp_dir, 'python', 'hello_world.py'): get_hello_world('python'),
@@ -46,6 +46,6 @@ def test_get_sources(tmp_dir, test_info_string_no_build, test_info_string_with_b
     }
     create_files_from_list(files)
     sources = source.get_sources(tmp_dir)
-    assert len(sources[MockProjectEnum.HelloWorld]) == 2
+    assert len(sources["helloworld"]) == 2
     assert not any(source_list for project_type, source_list in sources.items()
-                   if project_type != MockProjectEnum.HelloWorld)
+                   if project_type != "helloworld" and len(source_list) > 0)

@@ -1,18 +1,8 @@
 import pytest
 import functools
 
-from enum import Enum
-
 from glotter import Settings
 from glotter.source import get_sources
-
-
-def projects_enum(cls):
-    settings = Settings()
-    if not issubclass(cls, Enum):
-        raise AttributeError('projects_enum must be called on a subclass of enum.Enum')
-    settings.set_projects_enum(cls)
-    return cls
 
 
 def project_test(project_type):

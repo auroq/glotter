@@ -105,7 +105,7 @@ def get_sources(path):
     :param path: path to the directory through which to walk
     :return: a dict where the key is the ProjectType and the value is a list of all the Source objects of that project
     """
-    sources = {k: [] for k in Settings().projects_enum}
+    sources = {k: [] for k in Settings().projects}
     for root, dirs, files in os.walk(path):
         path = os.path.abspath(root)
         if "testinfo.yml" in files:
