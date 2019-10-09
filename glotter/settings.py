@@ -11,12 +11,13 @@ class Settings(metaclass=Singleton):
     def __init__(self):
         self._project_root = os.getcwd()
         self._parser = SettingsParser(self._project_root)
+        self._projects = self._parser.projects
         self._source_root = self._parser.source_root or self._project_root
         self._test_mappings = {}
 
     @property
     def projects(self):
-        return self._parser.projects
+        return self._projects
 
     @property
     def project_root(self):
@@ -38,11 +39,14 @@ class Settings(metaclass=Singleton):
         return self._test_mappings[project_type].__name__
 
     def add_test_mapping(self, project_type, func):
+        if project_type not in self._projects:
+            raise KeyError(f'Project type {project_type} was not found in glotter.yml')
+
         if project_type not in self._test_mappings:
             self._test_mappings[project_type] = []
         self._test_mappings[project_type].append(func)
 
-    def get_project_type_by_name(self, name):
+    def verify_project_type(self, name):
         try:
             return self.projects[name.lower()]
         except KeyError as e:
