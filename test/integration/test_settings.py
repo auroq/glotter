@@ -48,24 +48,26 @@ def test_parse_acronym_scheme(scheme_str, expected, tmp_dir):
     assert settings_parser.acronym_scheme == expected
 
 
-def test_parses_source_root_when_path_absolute(tmp_dir):
+@pytest.mark.parametrize('root_type', ['source_root', 'test_root'])
+def test_parses_root_when_path_absolute(root_type, tmp_dir):
     expected = os.path.abspath(os.path.join(tmp_dir, 'subdir'))
     os.makedirs(expected)
-    glotter_yml = f'settings:\n  source_root: "{expected}"'
+    glotter_yml = f'settings:\n  {root_type}: "{expected}"'
     path = os.path.join(tmp_dir, '.glotter.yml')
     settings_parser = setup_settings_parser(tmp_dir, path, glotter_yml)
     settings_parser.parse_settings_section()
-    assert settings_parser.source_root == expected
+    assert settings_parser.__getattribute__(root_type) == expected
 
 
-def test_parses_source_root_when_path_relative(tmp_dir):
+@pytest.mark.parametrize('root_type', ['source_root', 'test_root'])
+def test_parses_root_when_path_relative(root_type, tmp_dir):
     expected = os.path.abspath(os.path.join(tmp_dir, 'src'))
     os.makedirs(expected)
-    glotter_yml = f'settings:\n  source_root: "../src"'
+    glotter_yml = f'settings:\n  {root_type}: "../src"'
     path = os.path.join(tmp_dir, 'subdir', '.glotter.yml')
     settings_parser = setup_settings_parser(tmp_dir, path, glotter_yml)
     settings_parser.parse_settings_section()
-    assert settings_parser.source_root == expected
+    assert settings_parser.__getattribute__(root_type) == expected
 
 
 def test_parse_projects_when_no_projects(tmp_dir):
