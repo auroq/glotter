@@ -3,6 +3,7 @@ from uuid import uuid4 as uuid
 import pytest
 
 from glotter import containerfactory
+from glotter.project import Project
 from glotter.source import Source
 from glotter.testinfo import ContainerInfo
 from test.unit.mockdocker import DockerMock
@@ -82,3 +83,31 @@ def no_io(monkeypatch):
     monkeypatch.setattr('tempfile.mkdtemp', lambda *args, **kwargs: 'TEMP_DIR')
     monkeypatch.setattr('shutil.copy', lambda *args, **kwargs: '')
     monkeypatch.setattr('shutil.rmtree', lambda *args, **kwargs: '')
+
+
+@pytest.fixture
+def glotter_yml_projects():
+    return {
+        "baklava": Project(
+            words=["baklava"],
+            requires_parameters=False,
+        ),
+        "fileio": Project(
+            words=["file", "io"],
+            requires_parameters=False,
+            acronyms=["io"]
+        ),
+        "fibonacci": Project(
+            words=["fibonacci"],
+            requires_parameters=True
+        ),
+        "helloworld": Project(
+            words=["hello", "world"],
+            requires_parameters=False
+        ),
+    }
+
+
+@pytest.fixture
+def mock_projects(glotter_yml_projects, monkeypatch):
+    return monkeypatch.setattr('glotter.settings.Settings.projects', glotter_yml_projects)

@@ -51,7 +51,7 @@ def _run_language(language):
 
 def _run_project(project):
     try:
-        project_type = Settings().get_project_type_by_name(project)
+        project_type = Settings().verify_project_type(project)
         tests = _get_tests(project_type, _collect_tests())
         _run_pytest_and_exit(*tests)
     except KeyError:

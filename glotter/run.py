@@ -55,7 +55,7 @@ def _run_language(language):
 def _run_project(project):
     sources_by_type = get_sources(Settings().source_root)
     try:
-        project_type = Settings().get_project_type_by_name(project)
+        project_type = Settings().verify_project_type(project)
         sources = sources_by_type[project_type]
         params = _prompt_params(project_type)
         for source in sources:
