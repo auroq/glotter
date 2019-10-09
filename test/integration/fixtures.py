@@ -37,20 +37,20 @@ projects:
 @pytest.fixture
 def glotter_yml_projects():
     return {
-        MockProjectEnum.Baklava: Project(
+        "baklava": Project(
             words=["baklava"],
             requires_parameters=False,
         ),
-        MockProjectEnum.FileIO: Project(
+        "fileio": Project(
             words=["file", "io"],
             requires_parameters=False,
             acronyms=["io"]
         ),
-        MockProjectEnum.Fibonacci: Project(
+        "fibonacci": Project(
             words=["fibonacci"],
             requires_parameters=True
         ),
-        MockProjectEnum.HelloWorld: Project(
+        "helloworld": Project(
             words=["hello", "world"],
             requires_parameters=False
         ),
@@ -91,14 +91,6 @@ def tmp_dir():
     shutil.rmtree(dir, ignore_errors=True)
 
 
-class MockProjectEnum(Enum):
-    Baklava = auto()
-    FileIO = auto()
-    Fibonacci = auto()
-    HelloWorld = auto()
-
-
 @pytest.fixture
-def patch_projects_enum(monkeypatch):
-    monkeypatch.setattr('glotter.settings.Settings.projects_enum', MockProjectEnum)
-
+def mock_projects(glotter_yml_projects, monkeypatch):
+    return monkeypatch.setattr('glotter.settings.Settings.projects', glotter_yml_projects)
