@@ -27,12 +27,26 @@ list_of_tests = [
                              'test_factorial_invalid',
                              'test_factorial_valid',
                          ])
-def test_get_tests(test_function, monkeypatch):
+def test_get_tests_with_single_test_function(test_function, monkeypatch):
     project_type = 'project_type'
-    monkeypatch.setattr('glotter.settings.Settings.get_test_mapping_name', lambda *args, **kwargs: test_function)
+    monkeypatch.setattr('glotter.settings.Settings.get_test_mapping_name', lambda *args, **kwargs: [test_function])
     actual = _get_tests(project_type, list_of_tests)
     for t in list_of_tests:
         if test_function in t:
             assert t in actual
 
+
+@pytest.mark.parametrize('test_functions',
+                         [
+                             ['test_even_odd_invalid', 'test_even_odd_valid'],
+                             ['test_factorial_invalid', 'test_factorial_valid'],
+                         ])
+def test_get_tests_with_multiple_test_functions(test_functions, monkeypatch):
+    project_type = 'project_type'
+    monkeypatch.setattr('glotter.settings.Settings.get_test_mapping_name', lambda *args, **kwargs: test_functions)
+    actual = _get_tests(project_type, list_of_tests)
+    for t in list_of_tests:
+        for f in test_functions:
+            if f in t:
+                assert t in actual
 
