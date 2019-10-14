@@ -60,7 +60,7 @@ class Settings(metaclass=Singleton):
 
     def verify_project_type(self, name):
         try:
-            return self.projects[name.lower()]
+            return name.lower() in self.projects
         except KeyError as e:
             raise Exception(f'glotter.yml does not contain project name "{name}"', e)
 
