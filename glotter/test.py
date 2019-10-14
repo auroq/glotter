@@ -55,8 +55,8 @@ def _run_language(language):
 
 def _run_project(project):
     try:
-        project_type = Settings().verify_project_type(project)
-        tests = _get_tests(project_type, _collect_tests())
+        Settings().verify_project_type(project)
+        tests = _get_tests(project, _collect_tests())
         _run_pytest_and_exit(*tests)
     except KeyError:
         _error_and_exit(f'No valid sources found for project: "{project}"')
