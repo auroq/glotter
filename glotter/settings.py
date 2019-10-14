@@ -13,7 +13,6 @@ class Settings(metaclass=Singleton):
         self._parser = SettingsParser(self._project_root)
         self._projects = self._parser.projects
         self._source_root = self._parser.source_root or self._project_root
-        self._test_root = self._parser.test_root or self._project_root
         self._test_mappings = {}
 
     @property
@@ -31,14 +30,6 @@ class Settings(metaclass=Singleton):
     @source_root.setter
     def source_root(self, value):
         self._source_root = value or self._project_root
-
-    @property
-    def test_root(self):
-        return self._test_root
-
-    @test_root.setter
-    def test_root(self, value):
-        self._test_root = value or self._project_root
 
     @property
     def test_mappings(self):
@@ -73,7 +64,6 @@ class SettingsParser:
         self._acronym_scheme = None
         self._projects = None
         self._source_root = None
-        self._test_root = None
         self._yml_path = self._locate_yml()
         if self._yml_path is not None:
             self._yml = self._parse_yml()
@@ -86,7 +76,6 @@ class SettingsParser:
         if self._yml is not None:
             self._acronym_scheme = self._parse_acronym_scheme()
             self._source_root = self._parse_source_root()
-            self._test_root = self._parse_test_root()
 
     def parse_projects_section(self):
         if self.yml is not None:
@@ -95,10 +84,6 @@ class SettingsParser:
     @property
     def project_root(self):
         return self._project_root
-
-    @property
-    def test_root(self):
-        return self._test_root
 
     @property
     def yml_path(self):
@@ -129,9 +114,6 @@ class SettingsParser:
 
     def _parse_source_root(self):
         return self._parse_root('source_root')
-
-    def _parse_test_root(self):
-        return self._parse_root('test_root')
 
     def _parse_root(self, key):
         if 'settings' not in self._yml or key not in self._yml['settings']:

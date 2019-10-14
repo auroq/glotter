@@ -49,17 +49,22 @@ def _run_language(language):
     tests = []
     for project_type, sources in sources_by_type.items():
         for src in sources:
-            tests += _get_tests(project_type, all_tests, src)
-    _run_pytest_and_exit(*tests)
+            tests.extend(_get_tests(project_type, all_tests, src))
+    try:
+        _verify_test_list_not_empty(tests)
+        _run_pytest_and_exit(*tests)
+    except KeyError:
+        _error_and_exit(f'No tests found for sources in language "{language}"')
 
 
 def _run_project(project):
     try:
         Settings().verify_project_type(project)
         tests = _get_tests(project, _collect_tests())
+        _verify_test_list_not_empty(tests)
         _run_pytest_and_exit(*tests)
     except KeyError:
-        _error_and_exit(f'No valid sources found for project: "{project}"')
+        _error_and_exit(f'Either tests or sources not found for project: "{project}"')
 
 
 def _run_source(source):
@@ -70,13 +75,22 @@ def _run_source(source):
             filename = f'{src.name}{src.extension}'
             if filename.lower() == source.lower():
                 tests = _get_tests(project_type, all_tests, src)
-                _run_pytest_and_exit(*tests)
+                try:
+                    _verify_test_list_not_empty(tests)
+                    _run_pytest_and_exit(*tests)
+                except KeyError:
+                    _error_and_exit(f'No tests could be found for source "{source}"')
                 break
         else:  # If didn't break inner loop continue
             continue
         break  # Else break this loop as well
     else:
         _error_and_exit(f'Source "{source}" could not be found')
+
+
+def _verify_test_list_not_empty(tests):
+    if not tests:
+        raise KeyError(f'No tests were found')
 
 
 def _run_pytest_and_exit(*args):
