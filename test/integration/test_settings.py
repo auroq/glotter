@@ -48,7 +48,7 @@ def test_parse_acronym_scheme(scheme_str, expected, tmp_dir):
     assert settings_parser.acronym_scheme == expected
 
 
-@pytest.mark.parametrize('root_type', ['source_root', 'test_root'])
+@pytest.mark.parametrize('root_type', ['source_root'])
 def test_parses_root_when_path_absolute(root_type, tmp_dir):
     expected = os.path.abspath(os.path.join(tmp_dir, 'subdir'))
     os.makedirs(expected)
@@ -59,7 +59,7 @@ def test_parses_root_when_path_absolute(root_type, tmp_dir):
     assert settings_parser.__getattribute__(root_type) == expected
 
 
-@pytest.mark.parametrize('root_type', ['source_root', 'test_root'])
+@pytest.mark.parametrize('root_type', ['source_root'])
 def test_parses_root_when_path_relative(root_type, tmp_dir):
     expected = os.path.abspath(os.path.join(tmp_dir, 'src'))
     os.makedirs(expected)
