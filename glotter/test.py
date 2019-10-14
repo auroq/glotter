@@ -1,6 +1,7 @@
 import re
 import os
 import sys
+
 import pytest
 
 from glotter.source import get_sources
@@ -24,13 +25,16 @@ def _error_and_exit(msg):
 
 
 def _get_tests(project_type, all_tests, src=None):
-    test_function = Settings().get_test_mapping_name(project_type)
-    if src is not None:
-        filename = f'{src.name}{src.extension}'
-        pattern = rf'^(\w/?)*\.py::{test_function}\[{filename}.*\]$'
-    else:
-        pattern = rf'^(\w/?)*\.py::{test_function}\[.+\]$'
-    return [tst for tst in all_tests if re.fullmatch(pattern, tst) is not None]
+    test_functions = Settings().get_test_mapping_name(project_type)
+    tests = []
+    for test_func in test_functions:
+        if src is not None:
+            filename = f'{src.name}{src.extension}'
+            pattern = rf'^(\w/?)*\.py::{test_func}\[{filename}.*\]$'
+        else:
+            pattern = rf'^(\w/?)*\.py::{test_func}\[.+\]$'
+        tests.extend([tst for tst in all_tests if re.fullmatch(pattern, tst) is not None])
+    return tests
 
 
 def _run_all():
@@ -88,11 +92,10 @@ class TestCollectionPlugin:
     def pytest_collection_modifyitems(self, items):
         for item in items:
             self.collected.append(item.nodeid)
-
+            
 
 def _collect_tests():
     print('============================= collect test totals ==============================')
     plugin = TestCollectionPlugin()
     pytest.main(['-qq', '--collect-only'], plugins=[plugin])
     return plugin.collected
-

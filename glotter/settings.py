@@ -33,11 +33,22 @@ class Settings(metaclass=Singleton):
         self._source_root = value or self._project_root
 
     @property
+    def test_root(self):
+        return self._test_root
+
+    @test_root.setter
+    def test_root(self, value):
+        self._test_root = value or self._project_root
+
+    @property
     def test_mappings(self):
         return self._test_mappings
 
     def get_test_mapping_name(self, project_type):
-        return self._test_mappings[project_type].__name__
+        mappings = self._test_mappings.get(project_type)
+        if mappings:
+            return [func.__name__ for func in mappings]
+        return []
 
     def add_test_mapping(self, project_type, func):
         if project_type not in self._projects:
