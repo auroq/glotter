@@ -30,7 +30,7 @@ def _get_tests(project_type, all_tests, src=None):
     for test_func in test_functions:
         if src is not None:
             filename = f'{src.name}{src.extension}'
-            pattern = rf'^(\w/?)*\.py::{test_func}\[{filename}.*\]$'
+            pattern = rf'^(\w/?)*\.py::{test_func}\[{filename}(-.*)?\]$'
         else:
             pattern = rf'^(\w/?)*\.py::{test_func}\[.+\]$'
         tests.extend([tst for tst in all_tests if re.fullmatch(pattern, tst) is not None])
