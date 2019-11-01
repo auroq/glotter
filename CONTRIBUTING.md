@@ -21,6 +21,47 @@ Before you can build Glotter, there a few things you will need.
 - Docker: Glotter makes extensive use of docker. You will need to have docker installed on your machine and configured to use linux containers if you are windows (this is the default as of writing).
 - Python and Pip: Glotter is written in Python.
 
+### Structure
+
+The file structure of glotter looks like the following (with ommissions)
+
+- glotter
+- test
+  - integration
+  - unit
+- requirements.txt
+- setup.py
+
+The `glotter` directory contains all source code for the project.
+
+The `test` directory contains all tests for the project. It is split into two types: `unit` and `integration`.
+The difference for the sake of this project is that the unit tests are written in such a way to abstract our all external dependencies (docker, the filesystem, etc...). The integration tests test the integration between the code and external dependencies (docker, the filesystem, etc...).
+
+I will not explain `setup.py` or `requirements.txt` here.
+If you are unfamiliar with those, please read official python documentation.
+However, I do want to note that `setup.py` requires the same list of dependencies for testing, local development, and packaging.
+The reason for that is the nature of this project.
+This project uses pytest as its testing library, but it is also a wrapper around pytest.
+
+### Local Development
+
+The last thing to do before starting development is to install the requirements from `setup.py`.
+This can be done by calling `pip install -r requirements.txt`.
+> Note: I recommend doing so in a virutal environment.
+
+
+## Running Tests
+
+Tests can be run by passing either the unit or integration directory to pytest, for example `pytest test/integration`.
+
+
+## Final Requirements for Contributing
+
+- Please write tests for new functionality. No pull requests will be accepted without applicable new or existing unit or integration tests.
+- After creating the pull request, ensure that all the tets passed on travis. No pull requests will be merged without failing tests.
+- If your changes are related to an existing issue, please reference that issue in your pull request.
+- If your chages are not related to an existing issue, please either create a new issue and link to it.
+
 
 [wiki]:https://github.com/auroq/glotter/wiki
 [wiki-general-usage]:https://github.com/auroq/glotter/wiki/General-Usage
