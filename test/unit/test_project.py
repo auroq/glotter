@@ -112,7 +112,7 @@ def get_project_scheme_permutations():
         words = perm["words"]
         acronyms = perm["acronyms"]
         for scheme, expected in perm["schemes"].items():
-            yield (id, words, acronyms, scheme, expected)
+            yield id, words, acronyms, scheme, expected
 
 
 @pytest.mark.parametrize(("words", "acronyms", "scheme", "expected"),

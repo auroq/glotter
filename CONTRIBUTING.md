@@ -23,7 +23,7 @@ Before you can build Glotter, there a few things you will need.
 
 ### Structure
 
-The file structure of glotter looks like the following (with ommissions)
+The file structure of glotter looks like the following (with omissions)
 
 - glotter
 - test
@@ -47,7 +47,7 @@ This project uses pytest as its testing library, but it is also a wrapper around
 
 The last thing to do before starting development is to install the requirements from `setup.py`.
 This can be done by calling `pip install -r requirements.txt`.
-> Note: I recommend doing so in a virutal environment.
+> Note: I recommend doing so in a virtual environment.
 
 
 ## Running Tests
@@ -58,9 +58,9 @@ Tests can be run by passing either the unit or integration directory to pytest, 
 ## Final Requirements for Contributing
 
 - Please write tests for new functionality. No pull requests will be accepted without applicable new or existing unit or integration tests.
-- After creating the pull request, ensure that all the tets passed on travis. No pull requests will be merged without failing tests.
+- After creating the pull request, ensure that all the test passed on travis. No pull requests will be merged without failing tests.
 - If your changes are related to an existing issue, please reference that issue in your pull request.
-- If your chages are not related to an existing issue, please either create a new issue and link to it.
+- If your changes are not related to an existing issue, please either create a new issue and link to it.
 
 
 [wiki]:https://github.com/auroq/glotter/wiki

@@ -8,10 +8,13 @@ from glotter.source import get_sources
 def project_test(project_type):
     def decorator(func):
         Settings().add_test_mapping(project_type, func)
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
 
 

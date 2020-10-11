@@ -103,7 +103,7 @@ class TestCollectionPlugin:
     def __init__(self):
         self.collected = []
 
-    def pytest_collection_modifyitems(self, items):
+    def pytest_collection_modify_items(self, items):
         for item in items:
             self.collected.append(item.nodeid)
             
