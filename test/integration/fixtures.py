@@ -2,8 +2,6 @@ import shutil
 import tempfile
 import pytest
 
-from enum import Enum, auto
-
 from glotter.project import Project
 
 
