@@ -63,6 +63,7 @@ def source_no_build(test_info_string_no_build):
     iid = uuid().hex
     return Source(
         name=f'sourcename_{iid}',
+        language=f'python',
         path=f'sourcepath_{iid}',
         test_info_string=test_info_string_no_build,
     )
@@ -73,6 +74,7 @@ def source_with_build(test_info_string_with_build):
     iid = uuid().hex
     return Source(
         name=f'sourcename_{iid}',
+        language=f'go',
         path=f'sourcepath_{iid}',
         test_info_string=test_info_string_with_build,
     )

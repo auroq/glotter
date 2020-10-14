@@ -4,6 +4,7 @@ import argparse
 from glotter.run import run
 from glotter.test import test
 from glotter.download import download
+from glotter.report import report
 
 
 def main():
@@ -15,19 +16,21 @@ Commands:
   run         Run sources or group of sources. Use `glotter run --help` for more information.
   test        Run tests for sources or a group of sources. Use `glotter test --help` for more information.
   download    Download all the docker images required to run the tests
+  report      Output a report of discovered sources for configured projects and languages
 '''
     )
     parser.add_argument(
         'command',
         type=str,
         help='Subcommand to run',
-        choices=['run', 'test', 'download']
+        choices=['run', 'test', 'download', 'report']
     )
     args = parser.parse_args(sys.argv[1:2])
     commands = {
         'download': parse_download,
         'run': parse_run,
         'test': parse_test,
+        'report': parse_report,
     }
     commands[args.command]()
 
@@ -35,8 +38,8 @@ Commands:
 def parse_download():
     parser = argparse.ArgumentParser(
         prog='glotter',
-        description='Run a source or a group of sources. This command can run a language, a project'
-                    'or a single source. Only one option may be specified.',
+        description='Download images for a source or a group of sources. This command can be filtered by language, '
+                    'project, or a single source. Only one option may be specified.',
     )
     args = _parse_args_for_verb(parser)
     download(args)
@@ -45,7 +48,7 @@ def parse_download():
 def parse_run():
     parser = argparse.ArgumentParser(
         prog='glotter',
-        description='Run a source or a group of sources. This command can run a language, a project'
+        description='Run a source or a group of sources. This command can be filtered by language, project'
                     'or a single source. Only one option may be specified.',
     )
     args = _parse_args_for_verb(parser)
@@ -55,7 +58,7 @@ def parse_run():
 def parse_test():
     parser = argparse.ArgumentParser(
         prog='glotter',
-        description='Test a source or a group of sources. This command can test a language, a project'
+        description='Test a source or a group of sources. This command can be filtered by language, project'
                     'or a single source. Only one option may be specified.',
     )
     args = _parse_args_for_verb(parser)
@@ -84,6 +87,22 @@ def _parse_args_for_verb(parser):
     )
     args = parser.parse_args(sys.argv[2:])
     return args
+
+
+def parse_report():
+    parser = argparse.ArgumentParser(
+        prog='glotter',
+        description='Output a report of discovered sources for configured projects and languages'
+    )
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        '-o', '--output',
+        metavar='REPORT_PATH',
+        type=str,
+        help='output the report as a csv at REPORT_PATH instead of to stdout',
+    )
+    args = parser.parse_args(sys.argv[2:])
+    report(args)
 
 
 if __name__ == '__main__':

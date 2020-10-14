@@ -38,6 +38,10 @@ class Project:
     def acronym_scheme(self):
         return self._acronym_scheme
 
+    @property
+    def display_name(self):
+        return self._as_display()
+
     def get_project_name_by_scheme(self, naming):
         """
         gets a project name for a specific naming scheme
@@ -71,6 +75,9 @@ class Project:
 
     def _as_lower(self):
         return ''.join([word.lower() for word in self._words])
+
+    def _as_display(self):
+        return ' '.join([self._try_as_acronym(word.title(), NamingScheme.underscore) for word in self._words])
 
     def _is_acronym(self, word):
         return word.upper() in self._acronyms
