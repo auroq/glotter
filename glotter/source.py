@@ -10,14 +10,16 @@ from glotter.containerfactory import ContainerFactory
 class Source:
     """Metadata about a source file"""
 
-    def __init__(self, name, path, test_info_string):
+    def __init__(self, name, language, path, test_info_string):
         """Initialize source
 
         :param name: filename including extension
         :param path: path to the file excluding name
+        :param language: the language of the source
         :param test_info_string: a string in yaml format containing testinfo for a directory
         """
         self._name = name
+        self._language = language
         self._path = path
 
         self._test_info = testinfo.TestInfo.from_string(test_info_string, self)
@@ -36,6 +38,11 @@ class Source:
     def name(self):
         """Returns the name of the source excluding the extension"""
         return os.path.splitext(self._name)[0]
+
+    @property
+    def language(self):
+        """Returns the language of the source"""
+        return self._language
 
     @property
     def extension(self):
@@ -115,6 +122,6 @@ def get_sources(path):
             folder_project_names = folder_info.get_project_mappings(include_extension=True)
             for project_type, project_name in folder_project_names.items():
                 if project_name in files:
-                    source = Source(project_name, path, test_info_string)
+                    source = Source(project_name, os.path.basename(path), path, test_info_string)
                     sources[project_type].append(source)
     return sources

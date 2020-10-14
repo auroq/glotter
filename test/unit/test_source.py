@@ -7,7 +7,7 @@ from test.unit.fixtures import test_info_string_no_build, test_info_string_with_
 
 
 def test_full_path(test_info_string_no_build):
-    src = Source('name', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
+    src = Source('name', 'python', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
     expected = os.path.join('this', 'is', 'a', 'path', 'name')
     actual = src.full_path
     assert actual == expected
@@ -19,13 +19,13 @@ def test_full_path(test_info_string_no_build):
     ('name.name2.ext', '.ext')
 ])
 def test_name(name, expected, test_info_string_no_build):
-    src = Source(name, os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
+    src = Source(name, 'python', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
     actual = src.extension
     assert actual == expected
 
 
 def test_test_info_matches_test_info_string(test_info_string_no_build):
-    src = Source('name', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
+    src = Source('name', 'python', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
     expected = TestInfo.from_string(test_info_string_no_build, src)
     actual = src.test_info
     assert actual == expected
@@ -34,7 +34,7 @@ def test_test_info_matches_test_info_string(test_info_string_no_build):
 def test_build_does_nothing_when_build_is_empty(test_info_string_no_build, monkeypatch):
     monkeypatch.setattr('glotter.containerfactory.ContainerFactory.get_container',
                         lambda *args, **kwargs: pytest.fail('get_container was called'))
-    src = Source('name', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
+    src = Source('name', 'python', os.path.join('this', 'is', 'a', 'path'), test_info_string_no_build)
     src.build()
 
 
@@ -66,7 +66,7 @@ def test_run_execs_run_command(factory, source_no_build, no_io):
 
 
 def test_run_execs_run_command_with_params(factory, source_no_build, no_io):
-    params='-p param1 --longparam'
+    params = '-p param1 --longparam'
     source_no_build.run(params=params)
     run_cmd = f'{source_no_build.test_info.container_info.cmd.strip()} {params}'
     container = factory.get_container(source_no_build)
