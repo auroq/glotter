@@ -15,7 +15,7 @@ before_deploy:
 deploy:
   provider: pypi
   on:
-    branch: master
+    branch: main
   skip_cleanup: true
   user: auroq
   password:
