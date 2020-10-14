@@ -9,3 +9,8 @@ For getting started with Glotter, refer to our [wiki](https://github.com/auroq/g
 ## Contributing
 
 If you'd like to contribute to Glotter, read our [contributing guidelines](./CONTRIBUTING.md).
+
+## Changelog
+
+0.2.x Add reporting verb to output discovered sources as a table in stdout or to a csv
+0.1.x Initial release of working code.
