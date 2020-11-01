@@ -2,7 +2,7 @@ import os
 
 import yaml
 
-from glotter import testinfo
+from glotter.models import testinfo
 from glotter.settings import Settings
 from glotter.containerfactory import ContainerFactory
 

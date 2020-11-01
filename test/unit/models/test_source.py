@@ -1,9 +1,11 @@
 import os
 import pytest
 
-from glotter.source import Source
-from glotter.testinfo import TestInfo
-from test.unit.fixtures import test_info_string_no_build, test_info_string_with_build, factory, docker, no_io, source_no_build, source_with_build
+from glotter.models.source import Source
+from glotter.models.testinfo import TestInfo
+
+from test.unit.fixtures import docker, factory, no_io, source_no_build, source_with_build, \
+     test_info_string_no_build, test_info_string_with_build
 
 
 def test_full_path(test_info_string_no_build):
@@ -49,7 +51,7 @@ def test_build_runs_build_command(factory, source_with_build, monkeypatch, no_io
 
 
 def test_build_raises_error_on_non_zero_exit_code_from_exec(source_with_build, monkeypatch, no_io):
-    monkeypatch.setattr('glotter.source.Source._container_exec',
+    monkeypatch.setattr('glotter.models.source.Source._container_exec',
                         lambda *args, **kwargs: (1, 'error message'.encode('utf-8')))
     with pytest.raises(RuntimeError):
         source_with_build.build()
@@ -77,7 +79,7 @@ def test_run_execs_run_command_with_params(factory, source_no_build, no_io):
 
 
 def test_run_on_non_zero_exit_code_from_exec_raises_no_error(source_no_build, monkeypatch, no_io):
-    monkeypatch.setattr('glotter.source.Source._container_exec',
+    monkeypatch.setattr('glotter.models.source.Source._container_exec',
                         lambda *args, **kwargs: (1, 'error message'.encode('utf-8')))
     try:
         source_no_build.run()
@@ -97,7 +99,7 @@ def test_exec_runs_command(factory, source_no_build, no_io):
 
 def test_exec_on_non_zero_exit_code_raises_no_error(source_no_build, monkeypatch, no_io):
     exec_cmd = 'command -p param1 --longparam'
-    monkeypatch.setattr('glotter.source.Source._container_exec',
+    monkeypatch.setattr('glotter.models.source.Source._container_exec',
                         lambda *args, **kwargs: (1, 'error message'.encode('utf-8')))
     try:
         source_no_build.exec(exec_cmd)

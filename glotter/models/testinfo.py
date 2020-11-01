@@ -1,7 +1,8 @@
 import yaml
 from jinja2 import Environment, BaseLoader
+from typing import Dict
 
-from glotter.project import NamingScheme
+from glotter.models.project import NamingScheme
 from glotter.settings import Settings
 
 

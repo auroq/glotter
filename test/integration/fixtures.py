@@ -2,7 +2,7 @@ import shutil
 import tempfile
 import pytest
 
-from glotter.project import Project
+from glotter.models.project import Project
 
 
 @pytest.fixture

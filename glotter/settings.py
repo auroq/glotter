@@ -3,7 +3,7 @@ import yaml
 
 from warnings import warn
 
-from glotter.project import Project, AcronymScheme
+from glotter.models.project import Project, AcronymScheme
 from glotter.containerfactory import Singleton
 
 
