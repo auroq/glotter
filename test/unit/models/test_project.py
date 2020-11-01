@@ -1,6 +1,6 @@
 import pytest
 
-from glotter.project import Project, NamingScheme
+from glotter.models.project import Project, NamingScheme
 
 project_scheme_permutation_map = [
     {

@@ -2,7 +2,7 @@ import pytest
 import functools
 
 from glotter import Settings
-from glotter.source import get_sources
+from glotter.models.source import get_sources
 
 
 def project_test(project_type):

@@ -1,6 +1,6 @@
 import pytest
 
-from glotter.test import _get_tests
+from glotter.commands.test import _get_tests
 
 list_of_tests = [
     'test/projects/test_even_odd.py::test_even_odd_invalid[even-odd.c-no input]',

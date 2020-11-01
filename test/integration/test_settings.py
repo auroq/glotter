@@ -2,9 +2,9 @@ import os
 import pytest
 
 from glotter.settings import SettingsParser
-from glotter.project import AcronymScheme
+from glotter.models.project import AcronymScheme
 
-from test.integration.fixtures import tmp_dir, glotter_yml, glotter_yml_projects
+from test.integration.fixtures import glotter_yml, glotter_yml_projects, tmp_dir
 
 
 def setup_settings_parser(tmp_dir, path, contents):

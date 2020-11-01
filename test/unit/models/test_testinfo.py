@@ -1,8 +1,7 @@
 import pytest
 
 from uuid import uuid4 as uuid
-from glotter.testinfo import ContainerInfo, FolderInfo, TestInfo
-from glotter.project import NamingScheme
+from glotter.models.testinfo import ContainerInfo, FolderInfo, TestInfo
 
 
 @pytest.mark.parametrize('build', [uuid().hex, None], ids=['with_build', 'without_build'])

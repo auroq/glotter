@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-from glotter.source import get_sources
+from glotter.models.source import get_sources
 from glotter.settings import Settings
 
 

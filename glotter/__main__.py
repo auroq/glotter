@@ -1,10 +1,10 @@
 import sys
 import argparse
 
-from glotter.run import run
-from glotter.test import test
-from glotter.download import download
-from glotter.report import report
+from glotter.commands.run import run
+from glotter.commands.test import test
+from glotter.commands.download import download
+from glotter.commands.report import report
 
 
 def main():

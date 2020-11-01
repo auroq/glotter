@@ -1,9 +1,9 @@
 import os
 
-from glotter import source
+from glotter.models import source
 
-from test.integration.fixtures import tmp_dir, test_info_string_no_build, test_info_string_with_build, \
-    glotter_yml_projects, mock_projects
+from test.integration.fixtures import glotter_yml_projects, mock_projects, \
+     test_info_string_no_build, test_info_string_with_build, tmp_dir
 
 
 def get_hello_world(language):

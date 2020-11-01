@@ -3,9 +3,9 @@ from uuid import uuid4 as uuid
 import pytest
 
 from glotter import containerfactory
-from glotter.project import Project
-from glotter.source import Source
-from glotter.testinfo import ContainerInfo
+from glotter.models.project import Project
+from glotter.models.source import Source
+from glotter.models.testinfo import ContainerInfo
 from test.unit.mockdocker import DockerMock
 
 
