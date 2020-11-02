@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import yaml
 from jinja2 import Environment, BaseLoader
-from typing import Dict
+from typing import Dict, Any
 
 from glotter.models.project import NamingScheme
 from glotter.settings import Settings
@@ -9,7 +11,7 @@ from glotter.settings import Settings
 class ContainerInfo:
     """Configuration for a container to run for a directory"""
 
-    def __init__(self, image, tag, cmd, build=None):
+    def __init__(self, image: str, tag: str, cmd: str, build: str = None):
         """
         Initialize a ContainerInfo
 
@@ -24,27 +26,27 @@ class ContainerInfo:
         self._build = build
 
     @property
-    def image(self):
+    def image(self) -> str:
         """Returns the image to run"""
         return self._image
 
     @property
-    def cmd(self):
+    def cmd(self) -> str:
         """Returns the command to run the source inside the container"""
         return self._cmd
 
     @property
-    def tag(self):
+    def tag(self) -> str:
         """Returns the tag of the image to run"""
         return self._tag
 
     @property
-    def build(self):
+    def build(self) -> str:
         """Returns the command to build the source before running it inside the container"""
         return self._build
 
     @classmethod
-    def from_dict(cls, dictionary):
+    def from_dict(cls, dictionary: Dict[str, str]) -> ContainerInfo:
         """
         Create a ContainerInfo from a dictionary
 
@@ -62,7 +64,7 @@ class ContainerInfo:
             build=build
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: ContainerInfo) -> bool:
         return self.image == other.image and \
                self.cmd == other.cmd and \
                self.tag == other.tag and \
@@ -72,7 +74,7 @@ class ContainerInfo:
 class FolderInfo:
     """Metadata about sources in a directory"""
 
-    def __init__(self, extension, naming):
+    def __init__(self, extension: str, naming: str):
         """
         Initialize a FolderInfo
 
@@ -86,16 +88,16 @@ class FolderInfo:
             raise KeyError(f'Unknown naming scheme: "{naming}"')
 
     @property
-    def extension(self):
+    def extension(self) -> str:
         """Returns the extension for sources in the directory"""
         return self._extension
 
     @property
-    def naming(self):
+    def naming(self) -> NamingScheme:
         """Returns the naming scheme for the directory"""
         return self._naming
 
-    def get_project_mappings(self, include_extension=False):
+    def get_project_mappings(self, include_extension: bool = False) -> Dict[str, str]:
         """
         Uses the naming scheme to generate the expected source names in the directory
         and create a mapping from ProjectType to source name
@@ -109,17 +111,17 @@ class FolderInfo:
             for project_type, project in Settings().projects.items()
         }
 
-    def __eq__(self, other):
+    def __eq__(self, other: FolderInfo) -> bool:
         return self.extension == other.extension and \
                self.naming == other.naming
 
     @classmethod
-    def from_dict(cls, dictionary):
+    def from_dict(cls, dictionary: Dict[str, str]) -> FolderInfo:
         """
-        Create a FileInfo from a dictionary
+        Create a FolderInfo from a dictionary
 
-        :param dictionary: the dictionary representing FileInfo
-        :return: a new FileInfo
+        :param dictionary: the dictionary representing FolderInfo
+        :return: a new FolderInfo
         """
         return FolderInfo(dictionary['extension'], dictionary['naming'])
 
@@ -127,28 +129,28 @@ class FolderInfo:
 class TestInfo:
     """an object representation of a testinfo file"""
 
-    def __init__(self, container_info, file_info):
+    def __init__(self, container_info: ContainerInfo, folder_info: FolderInfo):
         """
         Initialize a TestInfo object
 
         :param container_info: ContainerInfo object
-        :param file_info: FileInfo object
+        :param folder_info: FolderInfo object
         """
         self._container_info = container_info
-        self._file_info = file_info
+        self._folder_info = folder_info
 
     @property
-    def container_info(self):
+    def container_info(self) -> ContainerInfo:
         """Return container info section"""
         return self._container_info
 
     @property
-    def file_info(self):
-        """Return file info section"""
-        return self._file_info
+    def folder_info(self) -> FolderInfo:
+        """Return folder info section"""
+        return self._folder_info
 
     @classmethod
-    def from_dict(cls, dictionary):
+    def from_dict(cls, dictionary: Dict[str, Dict[str, str]]) -> TestInfo:
         """
         Create a TestInfo from a dictionary
 
@@ -157,11 +159,11 @@ class TestInfo:
         """
         return TestInfo(
             container_info=ContainerInfo.from_dict(dictionary['container']),
-            file_info=FolderInfo.from_dict(dictionary['folder'])
+            folder_info=FolderInfo.from_dict(dictionary['folder'])
         )
 
     @classmethod
-    def from_string(cls, string, source):
+    def from_string(cls, string: str, source: Any) -> TestInfo:
         """
         Create a TestInfo from a string. Modify the string using Jinja2 templating. Then parse it as yaml
 
@@ -174,6 +176,6 @@ class TestInfo:
         info_yaml = yaml.safe_load(template_string)
         return cls.from_dict(info_yaml)
 
-    def __eq__(self, other):
+    def __eq__(self, other: TestInfo) -> bool:
         return self.container_info == other.container_info and \
-               self.file_info == other.file_info
+               self.folder_info == other.folder_info
