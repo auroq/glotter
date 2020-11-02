@@ -52,5 +52,5 @@ def test_test_info_from_dict():
         'container': container_info_dict,
         'folder': folder_info_dict
     })
-    expected = TestInfo(container_info=ci, file_info=fi)
+    expected = TestInfo(container_info=ci, folder_info=fi)
     assert test_info == expected
