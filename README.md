@@ -2,6 +2,13 @@
 
 [![Build Status](https://travis-ci.org/auroq/glotter.svg?branch=master)](https://travis-ci.org/auroq/glotter)
 
+## DEPRECATION NOTICE
+This Project has been deprecated in favor of [glotter2](https://github.com/rzuckerm/glotter2) and is no longer maintained.
+
+Thank you [@rzuckerm](https://github.com/rzuckerm) for your hard work and for picking up the torch!
+
+## Getting Started
+
 Glotter is an execution library for collections of single file scripts. It uses Docker to be able to build, run, and optionally test scripts in any language without having to install a local sdk or development environment.
 
 For getting started with Glotter, refer to our [wiki](https://github.com/auroq/glotter/wiki)
